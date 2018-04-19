@@ -15,6 +15,12 @@ public class Murid {
     private String idKelas;
     @SerializedName("password")
     private String password;
+    @SerializedName("nama_ayah")
+    private String namaAyah;
+    @SerializedName("nama_ibu")
+    private String namaIbu;
+    @SerializedName("no_telepon")
+    private String noTelepon;
 
     public String getId() {
         return id;
@@ -46,5 +52,29 @@ public class Murid {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNamaAyah() {
+        return namaAyah;
+    }
+
+    public void setNamaAyah(String namaAyah) {
+        this.namaAyah = namaAyah;
+    }
+
+    public String getNamaIbu() {
+        return namaIbu;
+    }
+
+    public void setNamaIbu(String namaIbu) {
+        this.namaIbu = namaIbu;
+    }
+
+    public String getNoTelepon() {
+        return noTelepon;
+    }
+
+    public void setNoTelepon(String noTelepon) {
+        this.noTelepon = noTelepon;
     }
 }

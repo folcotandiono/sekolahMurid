@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-    public static final String BASE_URL = "http://10.0.2.2:81/sekolah/index.php/";
+    public static final String BASE_URL = "http://10.0.2.2/sekolah/index.php/";
     private static Retrofit retrofit = null;
     public static Retrofit getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

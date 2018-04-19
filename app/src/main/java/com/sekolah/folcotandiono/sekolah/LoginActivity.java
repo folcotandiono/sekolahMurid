@@ -1,5 +1,7 @@
 package com.sekolah.folcotandiono.sekolah;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,10 +24,15 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText loginUsername;
+    private EditText loginId;
     private EditText loginPassword;
     private Button loginLogin;
     private ApiInterface loginApiInterface;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+    public static String LOGIN = "login";
+    public static String ID = "id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,25 +42,34 @@ public class LoginActivity extends AppCompatActivity {
         initView();
         initObject();
         initListener();
+
+        if (sharedPreferences.getString(ID, null) != null) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void initView() {
-        loginUsername = findViewById(R.id.loginUsername);
-        loginPassword = findViewById(R.id.loginPassword);
-        loginLogin = findViewById(R.id.loginLogin);
+        loginId = findViewById(R.id.login_id);
+        loginPassword = findViewById(R.id.login_password);
+        loginLogin = findViewById(R.id.login_login);
     }
 
     private void initObject() {
         loginApiInterface = ApiClient.getClient().create(ApiInterface.class);
+        sharedPreferences = getApplicationContext().getSharedPreferences(LOGIN, 0);
+        editor = sharedPreferences.edit();
     }
 
     private void initListener() {
         loginLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = loginUsername.getText().toString();
+                final String id = loginId.getText().toString();
                 String password = loginPassword.getText().toString();
-                if (username.isEmpty()) {
+
+                if (id.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Username kosong", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -61,8 +77,9 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Password kosong", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 Murid murid = new Murid();
-                murid.setId(username);
+                murid.setId(id);
                 murid.setPassword(password);
 
                 Call<MuridLoginResponse> call = loginApiInterface.muridLogin(murid);
@@ -71,10 +88,15 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call<MuridLoginResponse> call, Response<MuridLoginResponse> response) {
                         List<Murid> listMurid = response.body().getListMurid();
                         if (listMurid.size() == 0) {
-                            Toast.makeText(LoginActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "User tidak ditemukan", Toast.LENGTH_SHORT).show();
                         }
                         else {
-
+                            editor.putString(ID, id);
+                            editor.commit();
+                            String haha = sharedPreferences.getString(ID, null);
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                     }
 

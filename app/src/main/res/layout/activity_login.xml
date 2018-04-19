@@ -24,20 +24,20 @@
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/loginUsername"
-                android:hint="Username"
+                android:id="@+id/login_id"
+                android:hint="Id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/loginPassword"
+                android:id="@+id/login_password"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/loginLogin"
+                android:id="@+id/login_login"
                 android:text="Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

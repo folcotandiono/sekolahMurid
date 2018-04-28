@@ -1,5 +1,6 @@
 package com.sekolah.folcotandiono.sekolah.api;
 
+import com.sekolah.folcotandiono.sekolah.model.JadwalUjianResponse;
 import com.sekolah.folcotandiono.sekolah.model.Murid;
 import com.sekolah.folcotandiono.sekolah.model.MuridLoginResponse;
 
@@ -18,4 +19,7 @@ import retrofit2.http.QueryMap;
 public interface ApiInterface {
     @POST("murid/login")
     Call<MuridLoginResponse> muridLogin(@Body Murid murid);
+
+    @GET("murid/data_jadwal_ujian")
+    Call<JadwalUjianResponse> dataJadwalUjian(@QueryMap Map<String, String> param);
 }

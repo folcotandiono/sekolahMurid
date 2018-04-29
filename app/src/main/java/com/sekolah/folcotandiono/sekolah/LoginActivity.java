@@ -91,6 +91,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "User tidak ditemukan", Toast.LENGTH_SHORT).show();
                         }
                         else {
+                            sharedPreferences = getSharedPreferences(LOGIN, 0);
+                            editor = sharedPreferences.edit();
                             editor.putString(ID, id);
                             editor.commit();
                             String haha = sharedPreferences.getString(ID, null);

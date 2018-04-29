@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.sekolah.folcotandiono.sekolah.adapter.JadwalUjianAdapter;
+import com.sekolah.folcotandiono.sekolah.api.ApiClient;
 import com.sekolah.folcotandiono.sekolah.api.ApiInterface;
 import com.sekolah.folcotandiono.sekolah.model.JadwalUjian;
 import com.sekolah.folcotandiono.sekolah.model.JadwalUjianResponse;
@@ -108,6 +109,8 @@ public class JadwalUjianFragment extends Fragment{
     private void initObject() {
         getActivity().setTitle("Jadwal Ujian");
 
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
@@ -168,8 +171,8 @@ public class JadwalUjianFragment extends Fragment{
         Map<String, String> param = new HashMap<>();
         param.put(ID, sharedPreferences.getString(ID, null));
 
-        Call<JadwalUjianResponse> dataJadwalUjian = apiInterface.dataJadwalUjian(param);
-        dataJadwalUjian.enqueue(new Callback<JadwalUjianResponse>() {
+        Call<JadwalUjianResponse> call = apiInterface.getDataJadwalUjian(param);
+        call.enqueue(new Callback<JadwalUjianResponse>() {
             @Override
             public void onResponse(Call<JadwalUjianResponse> call, Response<JadwalUjianResponse> response) {
                 List<JadwalUjian> listJadwalUjian = response.body().getListJadwalUjian();
@@ -179,7 +182,7 @@ public class JadwalUjianFragment extends Fragment{
 
             @Override
             public void onFailure(Call<JadwalUjianResponse> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
     }

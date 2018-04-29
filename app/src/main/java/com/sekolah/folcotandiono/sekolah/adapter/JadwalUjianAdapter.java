@@ -1,15 +1,33 @@
 package com.sekolah.folcotandiono.sekolah.adapter;
 
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.sekolah.folcotandiono.sekolah.api.ApiClient;
+import com.sekolah.folcotandiono.sekolah.api.ApiInterface;
 import com.sekolah.folcotandiono.sekolah.model.JadwalUjian;
 import com.sekolah.folcotandiono.sekolah.R;
+import com.sekolah.folcotandiono.sekolah.model.WaktuResponse;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by folcotandiono on 4/25/2018.
@@ -17,6 +35,9 @@ import java.util.List;
 
 public class JadwalUjianAdapter extends RecyclerView.Adapter<JadwalUjianAdapter.ViewHolder> {
     private List<JadwalUjian> listJadwalUjian;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private static ApiInterface apiInterface;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -29,7 +50,8 @@ public class JadwalUjianAdapter extends RecyclerView.Adapter<JadwalUjianAdapter.
         private TextView namaSoalUjian;
         private TextView tanggal;
         private TextView durasi;
-        public ViewHolder(View v) {
+        private Button ujian;
+        public ViewHolder(final View v) {
             super(v);
             id = v.findViewById(R.id.id);
             nama = v.findViewById(R.id.nama);
@@ -37,15 +59,40 @@ public class JadwalUjianAdapter extends RecyclerView.Adapter<JadwalUjianAdapter.
             namaSoalUjian = v.findViewById(R.id.nama_soal_ujian);
             tanggal = v.findViewById(R.id.tanggal);
             durasi = v.findViewById(R.id.durasi);
-            v.setOnClickListener(new View.OnClickListener() {
+            ujian = v.findViewById(R.id.ujian);
+            ujian.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-//                    SharedPreferences sharedPreferences = v.getContext().getSharedPreferences(SOAL_UJIAN_TAMBAH, 0);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString(ID_MATA_PELAJARAN, id.getText().toString());
-//                    editor.putString(NAMA_MATA_PELAJARAN, nama.getText().toString());
-//                    editor.commit();
-//                    ((Activity) v.getContext()).finish();
+                public void onClick(View view) {
+                    Date start, end;
+                    String datee = tanggal.getText().toString();
+                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                    try {
+                        start = format.parse(datee);
+                        end = start;
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(end);
+                        calendar.add(Calendar.MINUTE, Integer.valueOf(durasi.getText().toString()));
+                        Log.d("calendar", calendar.toString());
+                        end = calendar.getTime();
+                        Log.d("waktu", start.toString() + " " + end.toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                    Call<WaktuResponse> call = apiInterface.getWaktu();
+                    call.enqueue(new Callback<WaktuResponse>() {
+                        @Override
+                        public void onResponse(Call<WaktuResponse> call, Response<WaktuResponse> response) {
+                            Date date = new Date(response.body().getWaktu());
+                            Toast.makeText(v.getContext(), date.toString(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<WaktuResponse> call, Throwable t) {
+
+                        }
+                    });
                 }
             });
         }

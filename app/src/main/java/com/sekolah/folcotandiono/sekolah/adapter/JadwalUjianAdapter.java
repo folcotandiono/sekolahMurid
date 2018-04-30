@@ -1,5 +1,6 @@
 package com.sekolah.folcotandiono.sekolah.adapter;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sekolah.folcotandiono.sekolah.IkutUjianActivity;
 import com.sekolah.folcotandiono.sekolah.api.ApiClient;
 import com.sekolah.folcotandiono.sekolah.api.ApiInterface;
 import com.sekolah.folcotandiono.sekolah.model.JadwalUjian;
@@ -28,6 +30,8 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.sekolah.folcotandiono.sekolah.JadwalUjianFragment.ID_SOAL_UJIAN;
 
 /**
  * Created by folcotandiono on 4/25/2018.
@@ -63,7 +67,7 @@ public class JadwalUjianAdapter extends RecyclerView.Adapter<JadwalUjianAdapter.
             ujian.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Date start, end;
+                    Date start = new Date(), end = new Date();
                     String datee = tanggal.getText().toString();
                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                     try {
@@ -79,13 +83,22 @@ public class JadwalUjianAdapter extends RecyclerView.Adapter<JadwalUjianAdapter.
                         e.printStackTrace();
                     }
 
+                    final Date startt = start, endd = end;
+
                     apiInterface = ApiClient.getClient().create(ApiInterface.class);
                     Call<WaktuResponse> call = apiInterface.getWaktu();
                     call.enqueue(new Callback<WaktuResponse>() {
                         @Override
                         public void onResponse(Call<WaktuResponse> call, Response<WaktuResponse> response) {
-                            Date date = new Date(response.body().getWaktu());
-                            Toast.makeText(v.getContext(), date.toString(), Toast.LENGTH_SHORT).show();
+                            Date date = new Date(Long.valueOf(response.body().getWaktu()) * 1000);
+                            if (date.after(startt) && date.before(endd)) {
+                                Intent intent = new Intent(v.getContext(), IkutUjianActivity.class);
+                                intent.putExtra(ID_SOAL_UJIAN, idSoalUjian.getText().toString());
+                                v.getContext().startActivity(intent);
+                            }
+                            else {
+                                Toast.makeText(v.getContext(), "Waktu sudah lewat", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override

@@ -58,8 +58,9 @@ public class JadwalUjianFragment extends Fragment{
     private SharedPreferences.Editor editor;
     private ApiInterface apiInterface;
 
-    private Button tambah;
     private RecyclerView recyclerView;
+
+    public static String ID_SOAL_UJIAN = "id_soal_ujian";
 
     /**
      * Use this factory method to create a new instance of
@@ -102,7 +103,6 @@ public class JadwalUjianFragment extends Fragment{
     }
 
     private void initView(View view) {
-        tambah = view.findViewById(R.id.tambah);
         recyclerView = view.findViewById(R.id.recycler_view);
     }
 

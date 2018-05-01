@@ -17,6 +17,7 @@ import com.sekolah.folcotandiono.sekolah.api.ApiClient;
 import com.sekolah.folcotandiono.sekolah.api.ApiInterface;
 import com.sekolah.folcotandiono.sekolah.model.JadwalUjian;
 import com.sekolah.folcotandiono.sekolah.R;
+import com.sekolah.folcotandiono.sekolah.model.SudahUjianResponse;
 import com.sekolah.folcotandiono.sekolah.model.WaktuResponse;
 
 import java.util.Calendar;
@@ -24,24 +25,29 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.sekolah.folcotandiono.sekolah.JadwalUjianFragment.ID_JADWAL_UJIAN;
 import static com.sekolah.folcotandiono.sekolah.JadwalUjianFragment.ID_SOAL_UJIAN;
+import static com.sekolah.folcotandiono.sekolah.LoginActivity.ID;
+import static com.sekolah.folcotandiono.sekolah.LoginActivity.LOGIN;
 
 /**
  * Created by folcotandiono on 4/25/2018.
  */
 
 public class JadwalUjianAdapter extends RecyclerView.Adapter<JadwalUjianAdapter.ViewHolder> {
-    private List<JadwalUjian> listJadwalUjian;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private static ApiInterface apiInterface;
+    public List<JadwalUjian> listJadwalUjian;
+    public static SharedPreferences sharedPreferences;
+    public static SharedPreferences.Editor editor;
+    public static ApiInterface apiInterface;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -92,9 +98,33 @@ public class JadwalUjianAdapter extends RecyclerView.Adapter<JadwalUjianAdapter.
                         public void onResponse(Call<WaktuResponse> call, Response<WaktuResponse> response) {
                             Date date = new Date(Long.valueOf(response.body().getWaktu()) * 1000);
                             if (date.after(startt) && date.before(endd)) {
-                                Intent intent = new Intent(v.getContext(), IkutUjianActivity.class);
-                                intent.putExtra(ID_SOAL_UJIAN, idSoalUjian.getText().toString());
-                                v.getContext().startActivity(intent);
+                                sharedPreferences = v.getContext().getSharedPreferences(LOGIN, 0);
+                                Map<String, String> param1 = new HashMap<>();
+                                param1.put("id_murid", sharedPreferences.getString(ID, null));
+                                param1.put(ID_SOAL_UJIAN, idSoalUjian.getText().toString());
+                                param1.put(ID_JADWAL_UJIAN, id.getText().toString());
+
+                                Call<SudahUjianResponse> call1 = apiInterface.getSudahUjian(param1);
+                                call1.enqueue(new Callback<SudahUjianResponse>() {
+                                    @Override
+                                    public void onResponse(Call<SudahUjianResponse> call, Response<SudahUjianResponse> response) {
+                                        int banyak = Integer.valueOf(response.body().getBanyak());
+                                        if (banyak == 0) {
+                                            Intent intent = new Intent(v.getContext(), IkutUjianActivity.class);
+                                            intent.putExtra(ID_SOAL_UJIAN, idSoalUjian.getText().toString());
+                                            intent.putExtra(ID_JADWAL_UJIAN, id.getText().toString());
+                                            v.getContext().startActivity(intent);
+                                        }
+                                        else {
+                                            Toast.makeText(v.getContext(), "Sudah ujian", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<SudahUjianResponse> call, Throwable t) {
+
+                                    }
+                                });
                             }
                             else {
                                 Toast.makeText(v.getContext(), "Waktu sudah lewat", Toast.LENGTH_SHORT).show();

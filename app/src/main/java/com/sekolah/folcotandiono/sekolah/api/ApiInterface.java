@@ -1,9 +1,12 @@
 package com.sekolah.folcotandiono.sekolah.api;
 
 import com.sekolah.folcotandiono.sekolah.model.JadwalUjianResponse;
+import com.sekolah.folcotandiono.sekolah.model.JawabanSoalUjianDetail;
+import com.sekolah.folcotandiono.sekolah.model.JawabanSoalUjianDetailResponse;
 import com.sekolah.folcotandiono.sekolah.model.Murid;
 import com.sekolah.folcotandiono.sekolah.model.MuridLoginResponse;
 import com.sekolah.folcotandiono.sekolah.model.SoalUjianDetailResponse;
+import com.sekolah.folcotandiono.sekolah.model.SudahUjianResponse;
 import com.sekolah.folcotandiono.sekolah.model.WaktuResponse;
 
 import java.util.Map;
@@ -30,4 +33,10 @@ public interface ApiInterface {
 
     @GET("murid/data_soal_ujian_detail_by_id_soal_ujian")
     Call<SoalUjianDetailResponse> getDataSoalUjianDetailByIdSoalUjian(@QueryMap Map<String, String> param);
+
+    @POST("murid/tambah_jawaban_soal_ujian_detail")
+    Call<JawabanSoalUjianDetailResponse> tambahJawabanSoalUjianDetail(@Body JawabanSoalUjianDetail jawabanSoalUjianDetail);
+
+    @GET("murid/sudah_ujian")
+    Call<SudahUjianResponse> getSudahUjian(@QueryMap Map<String, String> param);
 }

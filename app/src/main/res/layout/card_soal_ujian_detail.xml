@@ -19,6 +19,32 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/position"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/id"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
                 android:id="@+id/soal_tulisan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -194,6 +220,24 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<Button-->
+                <!--android:id="@+id/pilih"-->
+                <!--android:text="pilih gambar"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/gambar"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+        <!--</LinearLayout>-->
 
     </LinearLayout>
 

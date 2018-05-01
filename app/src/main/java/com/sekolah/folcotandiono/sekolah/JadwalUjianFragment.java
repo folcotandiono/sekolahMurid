@@ -61,6 +61,7 @@ public class JadwalUjianFragment extends Fragment{
     private RecyclerView recyclerView;
 
     public static String ID_SOAL_UJIAN = "id_soal_ujian";
+    public static String ID_JADWAL_UJIAN = "id_jadwal_ujian";
 
     /**
      * Use this factory method to create a new instance of

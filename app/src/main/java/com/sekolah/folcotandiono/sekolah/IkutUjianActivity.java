@@ -75,7 +75,7 @@ public class IkutUjianActivity extends AppCompatActivity {
     }
 
     private void initObject() {
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        apiInterface = ApiClient.getClient(getApplicationContext()).create(ApiInterface.class);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -104,7 +104,7 @@ public class IkutUjianActivity extends AppCompatActivity {
 
                     jawabanSoalUjianDetail.setIdJadwalUjian(getIntent().getStringExtra(ID_JADWAL_UJIAN));
 
-                    apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                    apiInterface = ApiClient.getClient(getApplicationContext()).create(ApiInterface.class);
                     apiInterface.tambahJawabanSoalUjianDetail(jawabanSoalUjianDetail).enqueue(new Callback<JawabanSoalUjianDetailResponse>() {
                         @Override
                         public void onResponse(Call<JawabanSoalUjianDetailResponse> call, Response<JawabanSoalUjianDetailResponse> response) {

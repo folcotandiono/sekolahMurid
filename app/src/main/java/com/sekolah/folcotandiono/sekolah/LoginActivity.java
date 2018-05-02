@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sekolah.folcotandiono.sekolah.api.ApiClient;
@@ -27,12 +28,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText loginId;
     private EditText loginPassword;
     private Button loginLogin;
+    private TextView konfigurasiIp;
     private ApiInterface loginApiInterface;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
     public static String LOGIN = "login";
     public static String ID = "id";
+    public static String IP_ADDRESS = "ip_address";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +57,11 @@ public class LoginActivity extends AppCompatActivity {
         loginId = findViewById(R.id.login_id);
         loginPassword = findViewById(R.id.login_password);
         loginLogin = findViewById(R.id.login_login);
+        konfigurasiIp = findViewById(R.id.konfigurasi_ip);
     }
 
     private void initObject() {
-        loginApiInterface = ApiClient.getClient().create(ApiInterface.class);
+        loginApiInterface = ApiClient.getClient(getApplicationContext()).create(ApiInterface.class);
         sharedPreferences = getApplicationContext().getSharedPreferences(LOGIN, 0);
         editor = sharedPreferences.edit();
     }
@@ -82,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 murid.setId(id);
                 murid.setPassword(password);
 
+                loginApiInterface = ApiClient.getClient(getApplicationContext()).create(ApiInterface.class);
                 Call<MuridLoginResponse> call = loginApiInterface.muridLogin(murid);
                 call.enqueue(new Callback<MuridLoginResponse>() {
                     @Override
@@ -107,6 +112,13 @@ public class LoginActivity extends AppCompatActivity {
                         t.printStackTrace();
                     }
                 });
+            }
+        });
+        konfigurasiIp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), KonfigurasiIpActivity.class);
+                startActivity(intent);
             }
         });
     }

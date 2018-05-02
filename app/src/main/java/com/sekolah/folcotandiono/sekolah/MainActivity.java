@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements JadwalUjianFragme
     }
 
     private void initObject() {
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        apiInterface = ApiClient.getClient(getApplicationContext()).create(ApiInterface.class);
 
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements JadwalUjianFragme
 
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(intent);
+
+                            finish();
                         }
                         else if (menuItem.getItemId() == R.id.jadwal_ujian) {
                             JadwalUjianFragment fragment = new JadwalUjianFragment();

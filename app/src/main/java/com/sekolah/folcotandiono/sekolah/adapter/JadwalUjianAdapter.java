@@ -91,7 +91,7 @@ public class JadwalUjianAdapter extends RecyclerView.Adapter<JadwalUjianAdapter.
 
                     final Date startt = start, endd = end;
 
-                    apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                    apiInterface = ApiClient.getClient(v.getContext()).create(ApiInterface.class);
                     Call<WaktuResponse> call = apiInterface.getWaktu();
                     call.enqueue(new Callback<WaktuResponse>() {
                         @Override

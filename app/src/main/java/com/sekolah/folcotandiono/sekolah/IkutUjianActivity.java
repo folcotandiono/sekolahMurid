@@ -90,16 +90,16 @@ public class IkutUjianActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 for (int i = 0; i < listSoalUjianDetail.size(); i++) {
-                    View v = recyclerView.getChildAt(i);
+                    RecyclerView.ViewHolder v = recyclerView.findViewHolderForAdapterPosition(i);
                     JawabanSoalUjianDetail jawabanSoalUjianDetail = new JawabanSoalUjianDetail();
 
                     sharedPreferences = getSharedPreferences(LOGIN, 0);
                     jawabanSoalUjianDetail.setIdMurid(sharedPreferences.getString(ID, null));
 
-                    TextView id = v.findViewById(R.id.id);
+                    TextView id = v.itemView.findViewById(R.id.id);
                     jawabanSoalUjianDetail.setIdSoalUjianDetail(id.getText().toString());
 
-                    TextView jawaban = v.findViewById(R.id.jawaban);
+                    TextView jawaban = v.itemView.findViewById(R.id.jawaban);
                     jawabanSoalUjianDetail.setJawabanTulisan(jawaban.getText().toString());
 
                     jawabanSoalUjianDetail.setIdJadwalUjian(getIntent().getStringExtra(ID_JADWAL_UJIAN));

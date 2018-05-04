@@ -58,6 +58,8 @@ public class IkutUjianActivity extends AppCompatActivity {
     private JadwalUjian jadwalUjian;
     private List<SoalUjianDetail> listSoalUjianDetail;
 
+    private SoalUjianDetailAdapter soalUjianDetailAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,7 @@ public class IkutUjianActivity extends AppCompatActivity {
         simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                List<String> listJawaban = soalUjianDetailAdapter.getListJawaban();
                 for (int i = 0; i < listSoalUjianDetail.size(); i++) {
                     RecyclerView.ViewHolder v = recyclerView.findViewHolderForAdapterPosition(i);
                     JawabanSoalUjianDetail jawabanSoalUjianDetail = new JawabanSoalUjianDetail();
@@ -96,11 +99,9 @@ public class IkutUjianActivity extends AppCompatActivity {
                     sharedPreferences = getSharedPreferences(LOGIN, 0);
                     jawabanSoalUjianDetail.setIdMurid(sharedPreferences.getString(ID, null));
 
-                    TextView id = v.itemView.findViewById(R.id.id);
-                    jawabanSoalUjianDetail.setIdSoalUjianDetail(id.getText().toString());
+                    jawabanSoalUjianDetail.setIdSoalUjianDetail(listSoalUjianDetail.get(i).getId());
 
-                    TextView jawaban = v.itemView.findViewById(R.id.jawaban);
-                    jawabanSoalUjianDetail.setJawabanTulisan(jawaban.getText().toString());
+                    jawabanSoalUjianDetail.setJawabanTulisan(listJawaban.get(i));
 
                     jawabanSoalUjianDetail.setIdJadwalUjian(getIntent().getStringExtra(ID_JADWAL_UJIAN));
 
@@ -141,7 +142,7 @@ public class IkutUjianActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SoalUjianDetailResponse> call, Response<SoalUjianDetailResponse> response) {
                 listSoalUjianDetail = response.body().getListSoalUjianDetail();
-                SoalUjianDetailAdapter soalUjianDetailAdapter = new SoalUjianDetailAdapter(listSoalUjianDetail);
+                soalUjianDetailAdapter = new SoalUjianDetailAdapter(listSoalUjianDetail);
                 recyclerView.setAdapter(soalUjianDetailAdapter);
             }
 

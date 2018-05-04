@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +62,8 @@ public class SoalUjianDetailAdapter extends RecyclerView.Adapter<SoalUjianDetail
     public static final int GALLERY_GAMBAR = 0;
     public static final int CAMERA_GAMBAR = 1;
 
+    private static List<String> listJawaban;
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -99,6 +103,23 @@ public class SoalUjianDetailAdapter extends RecyclerView.Adapter<SoalUjianDetail
             pilihanJawabanETulisan = v.findViewById(R.id.pilihan_jawaban_e_tulisan);
             pilihanJawabanEGambar = v.findViewById(R.id.pilihan_jawaban_e_gambar);
             jawaban = v.findViewById(R.id.jawaban);
+
+            jawaban.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    listJawaban.set(Integer.valueOf(position.getText().toString()), s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 //            pilih = v.findViewById(R.id.pilih);
 //            gambar = v.findViewById(R.id.gambar);
 //            pilih.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +173,8 @@ public class SoalUjianDetailAdapter extends RecyclerView.Adapter<SoalUjianDetail
     // Provide a suitable constructor (depends on the kind of dataset)
     public SoalUjianDetailAdapter(List<SoalUjianDetail> listSoalUjianDetail) {
         this.listSoalUjianDetail = listSoalUjianDetail;
+        listJawaban = new ArrayList<>();
+        for (int i = 0; i < listSoalUjianDetail.size(); i++) listJawaban.add("");
     }
 
     // Create new views (invoked by the layout manager)
@@ -233,6 +256,10 @@ public class SoalUjianDetailAdapter extends RecyclerView.Adapter<SoalUjianDetail
     @Override
     public int getItemCount() {
         return listSoalUjianDetail.size();
+    }
+
+    public List<String> getListJawaban() {
+        return listJawaban;
     }
 }
 
